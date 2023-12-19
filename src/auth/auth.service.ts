@@ -54,23 +54,54 @@ export class AuthService {
     return this.signToken(user.id, user.email);
   }
 
+  async refreshAccessToken(refreshToken: string): Promise<{
+    access_token: string;
+    expires_in: number;
+    refresh_token: string;
+    token_type: string;
+  }> {
+    const decoded = await this.jwt.verifyAsync(refreshToken, {
+      secret: this.config.get('JWT_REFRESH_SECRET'),
+    });
+
+    const payload = this.signToken(decoded.sub, decoded.email);
+
+    return payload;
+  }
+
   async signToken(
     userId: string,
     email: string,
-  ): Promise<{ access_token: string }> {
+  ): Promise<{
+    access_token: string;
+    expires_in: number;
+    refresh_token: string;
+    token_type: string;
+  }> {
     const payload = {
       sub: userId,
       email,
     };
-    const secret = this.config.get('JWT_SECRET');
+    const accessSecret = this.config.get('JWT_ACCESS_SECRET');
+    const refreshSecret = this.config.get('JWT_REFRESH_SECRET');
 
-    const token = await this.jwt.signAsync(payload, {
-      expiresIn: '15m',
-      secret: secret,
+    // Generate access token
+    const accessToken = await this.jwt.signAsync(payload, {
+      expiresIn: 28800,
+      secret: accessSecret,
+    });
+
+    // Generate refresh token
+    const refreshToken = await this.jwt.signAsync(payload, {
+      expiresIn: 604800,
+      secret: refreshSecret,
     });
 
     return {
-      access_token: token,
+      access_token: accessToken,
+      expires_in: 28800,
+      refresh_token: refreshToken,
+      token_type: 'Bearer',
     };
   }
 }

@@ -34,7 +34,7 @@ $ pnpm prisma:deploy
 ## Running the database
 
 ```bash
-# removeing database
+# removing database
 $ pnpm db:rm
 
 # deploying database

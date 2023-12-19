@@ -21,6 +21,8 @@ model User {
   firstName String?
   lastName  String?
 
+  role Role @default(USER)
+
   crises CrisesOnUsers[]
 }
 
@@ -34,6 +36,9 @@ model Crisis {
   location    String
   type        String
   severity    Int
+
+  imageUri    String?
+  externalUri String?
 
   users CrisesOnUsers[]
 }
