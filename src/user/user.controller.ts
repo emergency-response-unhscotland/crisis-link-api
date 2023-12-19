@@ -6,7 +6,7 @@ import { EditUserDto } from './dto';
 import { UserService } from './user.service';
 
 @UseGuards(JwtGuard)
-@Controller('users')
+@Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
   @Get('me')
@@ -14,6 +14,7 @@ export class UserController {
     return user;
   }
 
+  @Get('/settings')
   @Patch()
   editUser(@GetUser('id') userId: string, @Body() dto: EditUserDto) {
     return this.userService.editUser(userId, dto);

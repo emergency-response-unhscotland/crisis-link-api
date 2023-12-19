@@ -20,4 +20,12 @@ export class CreateCrisisDto {
   @IsNumber()
   @IsNotEmpty()
   severity: number;
+
+  @IsString()
+  @IsOptional()
+  image?: string;
+
+  @IsString()
+  @IsOptional()
+  link?: string;
 }

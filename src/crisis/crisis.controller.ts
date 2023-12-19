@@ -17,7 +17,7 @@ import { Roles } from '../auth/decorator';
 import { CrisisService } from './crisis.service';
 import { CreateCrisisDto, EditCrisisDto } from './dto';
 
-@UseGuards(JwtGuard)
+@UseGuards(JwtGuard, RolesGuard)
 @Controller('crises')
 export class CrisisController {
   constructor(private crisisService: CrisisService) {}
